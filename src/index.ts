@@ -1,16 +1,11 @@
-interface User {
-    name: string;
-    id: number;
-  }
-   
-  class UserAccount {
-    name: string;
-    id: number;
-   
-    constructor(name: string, id: number) {
-      this.name = name;
-      this.id = id;
-    }
-  }
-   
-  const user: User = new UserAccount("Murphy", 1);
+import * as _ from 'lodash';
+
+function component() {
+  const element = document.createElement('div');
+  let say_hi = 'Hello'
+  element.innerHTML = _.join(say_hi, ' ');
+
+  return element;
+}
+
+document.body.appendChild(component());
