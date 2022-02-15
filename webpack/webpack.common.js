@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-    entry:  path.resolve(__dirname, '../src/index.ts'),
+    entry:  path.resolve(__dirname, '../src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, '../dist'),
