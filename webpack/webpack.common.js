@@ -1,12 +1,14 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const os = require('os');
 
+console.log(__dirname)
 module.exports = {
-    entry:  path.resolve(__dirname, '../src/index.tsx'),
+    entry:  path.resolve('src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, '../dist'),
+      path: path.resolve('../dist'),
       clean: true,
     },
     module: {
@@ -16,26 +18,27 @@ module.exports = {
           test: /\.ts(x?)$/,
           use: [
             {
-              loader: 'thead-loader',
+              loader: 'thread-loader',
               options: {
-                workers: 8,
+                workers: os.cpus().length / 2,
                 poolTimeout: 5000,
               }
             },
             {
             loader: 'ts-loader',
             options: {
+              happyPackMode: true,
               transpileOnly: true,
               },
             },
           ],
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve('src'),
         },
         // CSS
         {
           test: /\.css$/,
           use: ['style-loader', 'css-loader'],
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve('src'),
         },
         //Images
         {
@@ -45,7 +48,7 @@ module.exports = {
               loader: 'url-loader',
             },
           ],
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve('src'),
         },
         //rest
         {
@@ -61,7 +64,15 @@ module.exports = {
     plugins: [
       new HtmlWebpackPlugin({
         title: 'Production',
+        template: path.resolve('src/index.html'),
       }),
-      new ForkTsCheckerWebpackPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          }
+        }
+      }),
     ],
 };
