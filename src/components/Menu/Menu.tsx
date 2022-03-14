@@ -1,27 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import useMenuController from "./useMenuController";
 
 const Couter = () => {
-  const { count, setCount } = useMenuController();
   const cities = ["Londyn", "Krakow", "Marcowka", "Franfurkt"];
-  const API_KEY = "742ab814811c440089a6b39cb3529a04";
+  const {data, loading, error} = useMenuController()
+  console.log({"data": data})
 
-  (async () => {
-    try {
-      const result = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${API_KEY}`
-      );
-      console.log({ result });
-      const res = await result.json();
-      console.log({ res });
-    } catch (error) {
-      console.error({ error });
-    }
-  })();
-
+  if(data != null){
+    console.log(data.name)
+  }
   return (
     <div>
-      
+      {loading && <div>Ładowanie strony...</div>}
+      {error && (<div>{`Error ${error}`}</div>)}
+      {data && (<div>{`miasto: ${data.name}, 
+      temperatura: ${data.main.temp} C, 
+      odczuwalna: ${data.main.feels_like} C`}</div>)}
     </div>
   );
 };

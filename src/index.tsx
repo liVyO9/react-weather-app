@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Counter from "./components/Counter/Counter";
+import Menu from "./components/Menu/Menu";
 
 ReactDOM.render(
 <div>
   <h1>Hello, Welcome to React and TypeScript</h1>
-  <Counter/>
+  <Menu/>
 </div>,
   document.getElementById("root")
 );
