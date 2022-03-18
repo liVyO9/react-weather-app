@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
 
+const CITIES = ["London", "Chicago"];
+const API_KEY = "742ab814811c440089a6b39cb3529a04";
+
+const fetchData = async (city: string) => {
+  const result = await fetch(
+    `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+  );
+  if (!result.ok) {
+    throw new Error(`Status: ${result.status}`);
+  }
+  const res = await result.json();
+  return res;
+};
+
 const useMenuController = () => {
-  const API_KEY = "742ab814811c440089a6b39cb3529a04";
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
 
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  const fetchData = async () => {
-    try {
-      const result = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${API_KEY}`
-      );
-      if(!result.ok){
-        throw new Error(`Status: ${result.status}`)
-      }
-      const res = await result.json();
-      // console.log({ res });
-      setData(res)
-    } catch (error) {
-        setError(error.message)
-    } finally{
-        setLoading(false)
-    }
+  const getDataForAllCities = async () => {
+    setLoading(true)
+    const cityPromises = CITIES.map((city) => {
+      return fetchData(city);
+    });
+    const result = await Promise.all(cityPromises)
+    setData(result)
+    setLoading(false)
   };
 
   useEffect(() => {
-    fetchData()
-  },[])
+    getDataForAllCities();
+  }, []);
 
-  return {data, setData, loading, setLoading, error, setError}
-}
+  return { data, setData, loading, setLoading, error, setError };
+};
 
 export default useMenuController;
